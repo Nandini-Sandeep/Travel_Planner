@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="Vacation Planner")
+st.set_page_config(page_title="Vacation Planner", layout="centered", page_icon="🌸")
 
 st.markdown("""
 <style>
@@ -32,6 +32,11 @@ st.markdown("""
     color:gray;
     margin-bottom:30px;
 }
+            
+div.stButton {
+    display: flex;
+    justify-content: center;
+}
 
 </style>
 """, unsafe_allow_html=True)
@@ -47,7 +52,8 @@ flight_pref = [
 hotel_options = [
     "Airbnb - 3000 per night",
     "Woodpecker - 2400 per night",
-    "MMT options - 3500 per night"
+    "MMT options - 3500 per night",
+    "Fine Touch by One Tree - 3700 per night"
 ]
 
 activities = [
@@ -62,7 +68,7 @@ activities = [
 # Session State
 # -----------------------------
 if "page" not in st.session_state:
-    st.session_state.page = 1
+    st.session_state.page = 0
     st.session_state.flight = None
     st.session_state.hotel = None
     st.session_state.schedule = None
@@ -70,12 +76,22 @@ if "page" not in st.session_state:
 # -----------------------------
 # Page 1
 # -----------------------------
-if st.session_state.page == 1:
+if st.session_state.page == 0:
+    
+    left, center, right = st.columns([3, 2, 3])
+    with center:
+        st.markdown('<p class="big-title">🌸 Vacation Planner</p>', unsafe_allow_html=True)
+        st.markdown('<p class="subtitle">Plan your vacation in 3 simple steps!</p>', unsafe_allow_html=True)
 
-    st.markdown('<p class="big-title">🌸 Vacation Planner</p>', unsafe_allow_html=True)
+        if st.button("Start Planning", use_container_width=True):
+            st.session_state.page = 1
+            st.rerun()
 
-    col1,col2 = st.columns(2)
+elif st.session_state.page == 1:
 
+    st.markdown('<p class="big-title">Select your preferred flight</p>', unsafe_allow_html=True)
+
+    col1,col2 = st.columns([2,1], gap="medium")
     # Resize the images to fit the column width
 
     with col1:
@@ -101,10 +117,8 @@ if st.session_state.page == 1:
 # -----------------------------
 if st.session_state.page == 2:
 
-    st.markdown('<p class="big-title">🌸 Vacation Planner</p>', unsafe_allow_html=True)
-
-    col1, col2, col3, col4 = st.columns(4)
-
+    st.markdown('<p class="big-title">Select your preferred hotel</p>', unsafe_allow_html=True)
+    col1, col2, col3, col4 = st.columns(4, gap="medium")
     # Resize the images to fit the column width
 
     with col1:
@@ -112,7 +126,7 @@ if st.session_state.page == 2:
         st.markdown("### Basil Stays - Airbnb")
         st.caption("₹3500 per night")
         st.caption("7 min from campus")
-        if st.button("Choose Basil Stays - Airbnb"):
+        if st.button("Choose Airbnb"):
             st.session_state.hotel = hotel_options[0]
 
     with col2:
@@ -120,7 +134,7 @@ if st.session_state.page == 2:
         st.markdown("### Woodpecker on MMT")
         st.caption("₹2400 per night")
         st.caption("10 min from campus")
-        if st.button("Choose Woodpecker on MMT"):
+        if st.button("Choose Woodpecker"):
             st.session_state.hotel = hotel_options[1]
 
     with col3:
@@ -128,15 +142,15 @@ if st.session_state.page == 2:
         st.markdown("### HKV Luxury Vibes")
         st.caption("₹3700 per night")
         st.caption("12 min from campus")
-        if st.button("Choose HKV Luxury Vibes"):
+        if st.button("Choose Luxury Vibes",use_container_width=True):
             st.session_state.hotel = hotel_options[2]
 
     with col4:
         st.image("images/fine_touch.jpg", width=200)
-        st.markdown("### Fine Touch by One Tree")
+        st.markdown("### Fine Touch - One Tree")
         st.caption("₹3700 per night")
         st.caption("9 min from campus")
-        if st.button("Choose Fine Touch by One Tree"):
+        if st.button("Choose Fine Touch",use_container_width=True):
             st.session_state.hotel = hotel_options[3]
 
     if st.session_state.hotel:
@@ -148,8 +162,6 @@ if st.session_state.page == 2:
 # Page 3
 # -----------------------------
 elif st.session_state.page == 3:
-
-    st.markdown('<p class="big-title">🌸 Vacation Planner</p>', unsafe_allow_html=True)
 
     slots = [
         "Thursday Evening",
@@ -223,23 +235,27 @@ elif st.session_state.page == 4:
         "<h3 style='text-align:center;'>✈️ Flight</h3>",
         unsafe_allow_html=True
     )
-
-    st.markdown(f"""
-        <div class="card">
-        <b>{st.session_state.flight}</b>
-        </div>
-    """,unsafe_allow_html=True)
+    
+    left, center, right = st.columns([1, 2, 1])
+    with center:
+        st.markdown(f"""
+            <div class="card">
+            <b>{st.session_state.flight}</b>
+            </div>""",
+            unsafe_allow_html=True, width=400)
 
     st.markdown(
         "<h3 style='text-align:center;'>🏨 Hotel</h3>",
         unsafe_allow_html=True
     )
-
-    st.markdown(f"""
-        <div class="card">
-        <b>{st.session_state.hotel}</b>
-        </div>
-    """,unsafe_allow_html=True)
+    
+    left, center, right = st.columns([1, 2, 1])
+    with center:
+        st.markdown(f"""
+            <div class="card">
+            <b>{st.session_state.hotel}</b>
+            </div>""",
+            unsafe_allow_html=True, width=400)
 
     # Align the schedule section to center
     st.markdown(
@@ -247,10 +263,11 @@ elif st.session_state.page == 4:
         unsafe_allow_html=True
     )       
 
-    for slot,activity in st.session_state.schedule.items():
-        st.markdown(f"""
-            <div class="card">
-            <h4>{slot}</h4>
-            {activity}
-            </div>
-        """,unsafe_allow_html=True)
+    left, center, right = st.columns([1, 2, 1])
+    with center:
+        for slot,activity in st.session_state.schedule.items():
+            st.markdown(f"""
+                <div class="card">
+                <b>{slot} - {activity}</b>
+                </div>""",
+                unsafe_allow_html=True, width=400)
