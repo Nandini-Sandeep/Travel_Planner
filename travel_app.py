@@ -45,7 +45,7 @@ div.stButton {
 # Options
 # -----------------------------
 flight_pref = [
-    "Indigo (9800/- but it flights at 8, 9:30, 11, 12, 1)",
+    "Indigo (9800/- flights at 8, 9:30, 11, 12, 1)",
     "Akasa (8700/- but flight only at 1:00 pm)"
 ]
 
